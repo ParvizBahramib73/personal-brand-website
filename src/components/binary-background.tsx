@@ -7,7 +7,7 @@ const MOBILE_BREAKPOINT = 640;
 const POINTER_RADIUS = 155;
 const TOUCH_RADIUS = 135;
 const MAX_ILLUMINATION = 0.46;
-const AMBIENT_WAVE_OPACITY = 0.043;
+const AMBIENT_WAVE_OPACITY = 0.1;
 const DESKTOP_SPACING = 26;
 const MOBILE_SPACING = 34;
 const DESKTOP_FRAME_MS = 1000 / 14;
@@ -48,8 +48,8 @@ export function BinaryBackground() {
     let active = false;
     let inView = true;
     let frameInterval = DESKTOP_FRAME_MS;
-    let baseRgb = "78, 88, 91";
-    let highlightRgb = "50, 86, 96";
+    let baseRgb = "65, 81, 88";
+    let highlightRgb = "45, 87, 100";
 
     const current: PointerPosition = { x: 0, y: 0, strength: 0 };
     const target: PointerPosition = { x: 0, y: 0, strength: 0 };
@@ -77,7 +77,7 @@ export function BinaryBackground() {
           ? digit.y
           : digit.y + Math.cos(seconds * 0.21 * digit.speed + digit.phase) * digit.driftY;
         const wave = still ? 0 : ambientWave(x, y, seconds);
-        const opacity = Math.min(0.14, digit.opacity + AMBIENT_WAVE_OPACITY * wave);
+        const opacity = Math.min(0.3, digit.opacity + AMBIENT_WAVE_OPACITY * wave);
 
         context.fillStyle = `rgba(${baseRgb}, ${opacity})`;
         context.fillText(digit.value, x, y);
@@ -156,8 +156,8 @@ export function BinaryBackground() {
       digits = makeBinaryGrid(width, height, mobile ? MOBILE_SPACING : DESKTOP_SPACING);
 
       const tokens = getComputedStyle(document.documentElement);
-      const fallbackBase = darkTheme.matches ? "123, 153, 161" : "78, 88, 91";
-      const fallbackHighlight = darkTheme.matches ? "160, 204, 213" : "50, 86, 96";
+      const fallbackBase = darkTheme.matches ? "137, 186, 195" : "65, 81, 88";
+      const fallbackHighlight = darkTheme.matches ? "160, 215, 225" : "45, 87, 100";
       baseRgb = tokens.getPropertyValue("--binary-base-rgb").trim() || fallbackBase;
       highlightRgb = tokens.getPropertyValue("--binary-highlight-rgb").trim() || fallbackHighlight;
 

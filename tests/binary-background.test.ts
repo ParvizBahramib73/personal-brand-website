@@ -11,7 +11,7 @@ test("binary grid is deterministic and stays within the canvas", () => {
     assert.ok(digit.x >= 0 && digit.x <= 320);
     assert.ok(digit.y >= 0 && digit.y <= 240);
     assert.ok(digit.value === "0" || digit.value === "1");
-    assert.ok(digit.opacity >= 0.038 && digit.opacity <= 0.073);
+    assert.ok(digit.opacity >= 0.12 && digit.opacity <= 0.195);
     assert.ok(digit.driftX >= 0.6 && digit.driftX <= 1.4);
     assert.ok(digit.driftY >= 0.6 && digit.driftY <= 1.4);
   }
