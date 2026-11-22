@@ -23,7 +23,7 @@ This site is deliberately small. Prefer **clarity over abstraction** and avoid i
 6. **SEO**: preserve canonical, hreflang, OG metadata, JSON-LD, sitemap and static export.
 7. **Performance**: do not introduce client-side JavaScript for static content; use lightweight images and CSS.
 8. **Safety**: never commit tokens, secrets, confidential work details or unverified image rights.
-9. **Verification**: run `npm run lint && npm run typecheck && npm run test && npm run build` before merging.
+9. **Verification**: run `npm run format:check && npm run lint && npm run typecheck && npm run test && npm run build` before merging.
 10. **Delivery**: use a reviewed pull request and confirm the GitHub Pages deployment is green.
 
 ## Source-of-truth notes

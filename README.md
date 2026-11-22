@@ -7,7 +7,7 @@ A minimal bilingual portfolio for a senior front-end developer. Built with **Nex
 Requirements: Node.js 22+
 
 ```sh
-npm install
+npm ci
 npm run dev
 ```
 
@@ -16,6 +16,7 @@ The default entry route is `/`, and translated routes are `/en/` and `/fa/`. Car
 ## Quality checks
 
 ```sh
+npm run format:check
 npm run lint
 npm run typecheck
 npm run test
