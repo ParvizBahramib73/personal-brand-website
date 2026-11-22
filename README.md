@@ -24,14 +24,16 @@ npm run build
 
 Open http://localhost:3000 (redirects to /en).
 
-## Deploy to Vercel
+## Deploy to GitHub Pages
 
-1. In Vercel choose **Add New Project** and import this GitHub repository.
-2. Set the framework to Next.js, and deploy after the feature PR is merged.
-3. Once Vercel assigns the project's actual `*.vercel.app` URL, set `NEXT_PUBLIC_SITE_URL` to that exact HTTPS URL in Vercel environment settings, then redeploy to generate correct canonical and social-sharing URLs.
-4. A custom domain may be connected later; no domain is required to start.
+1. The site uses Next.js `output: "export"`; the static build is written to `out/`.
+2. In repository **Settings → Pages → Build and deployment**, choose **GitHub Actions**.
+3. Merge the feature pull request into `master` to trigger `.github/workflows/deploy-pages.yml`.
+4. Check the **Actions** tab for a successful build and deploy. The intended URL is https://parvizbahramib73.github.io/personal-brand-website/.
+5. GitHub Pages availability for a **private** repository depends on the account plan. If Pages cannot be enabled, switch the repository to **Public** under **Settings → General → Danger Zone** before deploying. This makes source history publicly visible. Do not publish private assets or secrets.
+6. A custom domain can be configured later; update `src/lib/site.ts` canonical URL and `next.config.ts` `basePath` for that change.
 
-**GitHub stores the source; Vercel hosts the Next.js website.** GitHub Pages is not configured for this dynamic Next.js deployment.
+**Hosting is GitHub Pages, not Vercel.** The published site is static; the contact option is a direct email link, not a server-side form.
 
 ## Content updates
 
@@ -49,7 +51,7 @@ Professional project details and links are deliberately withheld until provided.
 - Supply a reviewed PDF resume before enabling a download CTA
 - Supply project-specific descriptions, public screenshots, contribution details and links
 - Confirm whether publicly displaying the supplied phone number is desirable
-- Set up Vercel project and verify production URL, preview card, browser accessibility and mobile RTL
+- Enable GitHub Pages Actions and verify live URL, preview card, browser accessibility and mobile RTL
 - A full contact form is intentionally not enabled; currently the reliable contact route is a direct `mailto:` link. A secure form needs a configured backend/mail service and anti-spam controls.
 
 ## Status
