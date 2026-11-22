@@ -12,9 +12,9 @@ function Page({lang}:{lang:Locale}){
  return <>
   <a className="skip-link" href="#main">{t.skip}</a>
   <header className="site-header"><div className="wrap header-inner">
-   <Link className="wordmark" href={"/"+lang+"#home"} aria-label={site.name[lang]}>{site.name[lang]}<b>.</b></Link>
+   <Link className="wordmark" href={"/"+lang+"/details/#home"} aria-label={site.name[lang]}>{site.name[lang]}<b>.</b></Link>
    <nav aria-label={lang==="fa"?"فهرست اصلی":"Main navigation"} className="desktop-nav">{anchors.map((id,i)=><a key={id} href={"#"+id}>{t.nav[i]}</a>)}</nav>
-   <div className="header-end"><Link className="language" href={"/"+other} hrefLang={other}>{lang==="en"?"FA / فارسی":"EN / English"}</Link><a className="header-contact" href="#contact">{t.contact}<span aria-hidden="true"> ↗</span></a></div>
+   <div className="header-end"><Link className="language" href={"/"+other+"/details/"} hrefLang={other}>{lang==="en"?"FA / فارسی":"EN / English"}</Link><a className="header-contact" href="#contact">{t.contact}<span aria-hidden="true"> ↗</span></a></div>
    </div><nav className="mobile-nav wrap" aria-label={lang==="fa"?"بخش‌های صفحه":"Page sections"}>{anchors.map((id,i)=><a href={"#"+id} key={id}>{t.nav[i]}</a>)}</nav>
   </header>
   <main id="main">
