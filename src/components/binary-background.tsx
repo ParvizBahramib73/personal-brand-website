@@ -1,24 +1,27 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { ambientWave, makeBinaryGrid, radialFalloff, type BinaryDigit } from "@/lib/binary-field";
+import { makeBinaryGrid, mexicanWave, radialFalloff, type BinaryDigit } from "@/lib/binary-field";
 
 const MOBILE_BREAKPOINT = 640;
 const POINTER_RADIUS = 155;
 const TOUCH_RADIUS = 135;
 const MAX_ILLUMINATION = 0.46;
-const AMBIENT_WAVE_OPACITY = 0.1;
+const AMBIENT_WAVE_OPACITY = 0.15;
+const WAVE_LIFT_DESKTOP = 5.5;
+const WAVE_LIFT_MOBILE = 4.5;
 const DESKTOP_SPACING = 26;
 const MOBILE_SPACING = 34;
-const DESKTOP_FRAME_MS = 1000 / 14;
-const MOBILE_FRAME_MS = 1000 / 10;
+const DESKTOP_FRAME_MS = 1000 / 18;
+const MOBILE_FRAME_MS = 1000 / 12;
 const POSITION_EASING = 0.22;
 const OPACITY_EASING = 0.16;
 
 type PointerPosition = { x: number; y: number; strength: number };
 
 /**
- * Lightweight, low-frame-rate ambient motion with a responsive pointer light.
+ * Lightweight stadium-style micro-wave with a responsive pointer light.
+ * Digits rise sequentially and settle without requiring user interaction.
  * Motion pauses when out of view and is disabled for reduced-motion users.
  */
 export function BinaryBackground() {
@@ -48,6 +51,7 @@ export function BinaryBackground() {
     let active = false;
     let inView = true;
     let frameInterval = DESKTOP_FRAME_MS;
+    let waveLift = WAVE_LIFT_DESKTOP;
     let baseRgb = "65, 81, 88";
     let highlightRgb = "45, 87, 100";
 
@@ -73,11 +77,12 @@ export function BinaryBackground() {
         const x = still
           ? digit.x
           : digit.x + Math.sin(seconds * 0.24 * digit.speed + digit.phase) * digit.driftX;
-        const y = still
+        const restingY = still
           ? digit.y
           : digit.y + Math.cos(seconds * 0.21 * digit.speed + digit.phase) * digit.driftY;
-        const wave = still ? 0 : ambientWave(x, y, seconds);
-        const opacity = Math.min(0.3, digit.opacity + AMBIENT_WAVE_OPACITY * wave);
+        const wave = still ? 0 : mexicanWave(x, digit.y, seconds, width, height);
+        const y = restingY - wave * waveLift;
+        const opacity = Math.min(0.36, digit.opacity + AMBIENT_WAVE_OPACITY * wave);
 
         context.fillStyle = `rgba(${baseRgb}, ${opacity})`;
         context.fillText(digit.value, x, y);
@@ -153,6 +158,7 @@ export function BinaryBackground() {
       const mobile = width <= MOBILE_BREAKPOINT;
       radius = mobile ? TOUCH_RADIUS : POINTER_RADIUS;
       frameInterval = mobile ? MOBILE_FRAME_MS : DESKTOP_FRAME_MS;
+      waveLift = mobile ? WAVE_LIFT_MOBILE : WAVE_LIFT_DESKTOP;
       digits = makeBinaryGrid(width, height, mobile ? MOBILE_SPACING : DESKTOP_SPACING);
 
       const tokens = getComputedStyle(document.documentElement);
