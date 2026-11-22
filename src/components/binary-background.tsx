@@ -86,9 +86,7 @@ export function BinaryBackground() {
         if (distanceSquared >= radiusSquared) continue;
 
         const glow =
-          radialFalloff(Math.sqrt(distanceSquared), radius) *
-          current.strength *
-          MAX_ILLUMINATION;
+          radialFalloff(Math.sqrt(distanceSquared), radius) * current.strength * MAX_ILLUMINATION;
         if (glow < 0.006) continue;
 
         context.fillStyle = `rgba(${highlightRgb}, ${glow})`;
@@ -96,7 +94,7 @@ export function BinaryBackground() {
       }
     }
 
-        function cancelFrame() {
+    function cancelFrame() {
       if (frame !== null) {
         window.cancelAnimationFrame(frame);
         frame = null;
@@ -127,7 +125,7 @@ export function BinaryBackground() {
       scheduleFrame();
     }
 
-        function rebuild() {
+    function rebuild() {
       const bounds = canvas.getBoundingClientRect();
       width = Math.round(bounds.width);
       height = Math.round(bounds.height);
@@ -157,8 +155,7 @@ export function BinaryBackground() {
       const fallbackBase = darkTheme.matches ? "123, 153, 161" : "78, 88, 91";
       const fallbackHighlight = darkTheme.matches ? "160, 204, 213" : "50, 86, 96";
       baseRgb = tokens.getPropertyValue("--binary-base-rgb").trim() || fallbackBase;
-      highlightRgb =
-        tokens.getPropertyValue("--binary-highlight-rgb").trim() || fallbackHighlight;
+      highlightRgb = tokens.getPropertyValue("--binary-highlight-rgb").trim() || fallbackHighlight;
 
       if (reducedMotion.matches) {
         cancelFrame();
@@ -172,7 +169,7 @@ export function BinaryBackground() {
       }
     }
 
-        function clearLight() {
+    function clearLight() {
       target.strength = 0;
       if (active) scheduleFrame();
       active = false;
