@@ -1,4 +1,6 @@
 import Link from "next/link";
+import type {Metadata} from "next";
+import {pageMetadata,structuredProfile,jsonLd} from "@/lib/seo";
 import {notFound} from "next/navigation";
 import {copy} from "@/lib/copy";
 import {isLocale,site,jobs,skills,projectNames} from "@/lib/site";
@@ -38,4 +40,5 @@ function Page({lang}:{lang:Locale}){
   <footer className="footer"><div className="wrap footer-inner"><span>© {new Date().getFullYear()} {site.name[lang]}</span><span>{t.footer}</span><a href="#home" aria-label="Back to top">↑</a></div></footer>
  </>;
 }
-export default async function Home({params}:{params:Promise<{lang:string}>}){const {lang}=await params;if(!isLocale(lang))notFound();return <Page lang={lang}/>;}
+export async function generateMetadata({params}:{params:Promise<{lang:string}>}):Promise<Metadata>{const {lang}=await params;return isLocale(lang)?pageMetadata(lang,"details"):{};}
+export default async function Home({params}:{params:Promise<{lang:string}>}){const {lang}=await params;if(!isLocale(lang))notFound();return <><script type="application/ld+json" dangerouslySetInnerHTML={{__html:jsonLd(structuredProfile(lang,"details"))}}/><Page lang={lang}/></>;}
