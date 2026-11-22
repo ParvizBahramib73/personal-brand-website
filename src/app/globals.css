@@ -52,3 +52,64 @@
 [lang="fa"] .minimal-language{letter-spacing:0}
 @media(max-width:550px){.minimal-page{padding:64px 24px}.minimal-portrait{width:154px;height:154px;margin-bottom:26px}.minimal-center h1{font-size:35px}.minimal-role{font-size:15px}.minimal-socials{gap:20px;margin-top:18px}.minimal-about{margin-top:22px}}
 @media(prefers-reduced-motion:reduce){.minimal-socials a,.minimal-about{transition:none}}
+
+
+/* Compact, searchable profile page: semantic sections, brief scannable content */
+.profile-page{background:var(--bg);color:var(--ink);min-height:100svh}
+.profile-header{max-width:920px;margin:auto;padding:27px 24px;display:flex;justify-content:space-between;align-items:center;gap:20px}
+.profile-back,.profile-switch{font-size:13px;font-weight:600;color:var(--muted)}
+.profile-back:hover,.profile-switch:hover{color:var(--accent)}
+.profile-main{max-width:780px;margin:0 auto;padding:80px 24px 100px}
+.profile-opening{margin-bottom:80px}
+.profile-eyebrow{font-size:11px;letter-spacing:.14em;color:var(--accent);font-weight:700;margin-bottom:20px}
+.profile-opening h1{font-size:clamp(36px,5vw,64px);line-height:1.16;font-weight:600;max-width:680px;margin-bottom:25px}
+.profile-lead{font-size:clamp(17px,2vw,20px);line-height:1.9;color:var(--muted);max-width:700px}
+.profile-section{border-top:1px solid var(--line);padding:36px 0}
+.profile-section h2{font-size:clamp(21px,2.8vw,27px);margin:0 0 19px;letter-spacing:-.02em}
+.profile-section>p{font-size:15px;line-height:1.9;color:var(--muted);margin-bottom:8px}
+.profile-job{display:flex;justify-content:space-between;gap:15px;align-items:baseline;padding:16px 0;border-bottom:1px solid var(--line)}
+.profile-job:last-child{border-bottom:0}
+.profile-job h3{font-size:16px;font-weight:600;margin:0 0 3px}
+.profile-job p{margin:0}
+.profile-company,.profile-date,.profile-disclaimer{font-size:12px!important;color:var(--muted)}
+.profile-date{text-align:end}
+.profile-disclaimer{margin-top:12px}
+.profile-tags,.profile-projects{display:flex;flex-wrap:wrap;gap:9px}
+.profile-tags span{border:1px solid var(--line);color:var(--ink);font-size:13px;padding:5px 12px;border-radius:3px}
+.profile-projects span{padding:8px 12px;background:var(--paper);font-size:13px;color:var(--ink);border-radius:3px}
+.profile-contact .profile-links{display:flex;gap:22px;flex-wrap:wrap;margin-top:26px}
+.profile-links a{font-size:13px;font-weight:600;color:var(--accent)}
+.profile-footer{max-width:920px;border-top:1px solid var(--line);padding:25px 24px;margin:auto;font-size:12px;color:var(--muted)}
+[lang=fa] .profile-opening h1,[lang=fa] .profile-section h2,[lang=fa] .profile-eyebrow{letter-spacing:0}
+@media(max-width:600px){.profile-main{padding:45px 24px 65px}.profile-opening{margin-bottom:45px}.profile-job{flex-direction:column;gap:3px}.profile-date{text-align:start}.profile-opening h1{font-size:37px}}
+/* Respect operating system theme without JavaScript or a distracting toggle. */
+:root{color-scheme:light dark}
+@media(prefers-color-scheme:dark){
+ :root{--bg:#131718;--paper:#1d2527;--ink:#f0f3f2;--muted:#a1adad;--line:#374244;--accent:#9dcdd5}
+ body{background:var(--bg);color:var(--ink)}
+ .minimal-page{background:#121719;color:#eef2f1}
+ .minimal-center h1{color:#eef2f1}
+ .minimal-role,.minimal-language,.minimal-about,.minimal-socials a{color:#b2bdbf}
+ .minimal-about{border-color:#516064}
+ .minimal-socials a:hover,.minimal-about:hover,.minimal-language:hover{color:#fff}
+ .minimal-portrait{box-shadow:0 0 0 1px #455054}
+ .site-header{background:#131718}
+ .wordmark,.desktop-nav a,.mobile-nav a,.header-contact{color:var(--ink)}
+ .header-contact{border-color:var(--line)}
+ .section-tint,.skill-group,.project,.education-panel{background:var(--paper)}
+ .rich-copy>p,.job-description,.helper,.project-copy p,.education-panel p,.hero-description,.beyond-copy{color:var(--muted)}
+ .job,.timeline{border-color:var(--line)}
+ .tags span{border-color:var(--line);color:var(--muted)}
+ .project-visual,.project:nth-child(3n+2) .project-visual,.project:nth-child(3n) .project-visual{background:#253236;color:var(--muted)}
+ .project-symbol{color:#637d83}
+ .portrait-frame{background:#1d2728;border-color:var(--line)}
+ .portrait-art>span{color:#aac7c8}
+ .circle{border-color:#536b68}
+ .circle-2{background:#304345}
+ .dark-section{background:#0d1214}
+ .contact-email{border-color:var(--line)}
+ .contact-details a,.contact-details strong{color:var(--ink)}
+ .button.solid{background:#e9efed;color:#172021;border-color:#e9efed}
+ .button.outline{border-color:var(--line);color:var(--ink)}
+ .profile-projects span{background:var(--paper)}
+}

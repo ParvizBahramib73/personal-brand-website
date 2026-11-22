@@ -1,44 +1,97 @@
 import Link from "next/link";
-import type {Metadata} from "next";
-import {pageMetadata,structuredProfile,jsonLd} from "@/lib/seo";
-import {notFound} from "next/navigation";
-import {copy} from "@/lib/copy";
-import {isLocale,site,jobs,skills,projectNames} from "@/lib/site";
-import type {Locale} from "@/lib/site";
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { isLocale, site, jobs, type Locale } from "@/lib/site";
+import { pageMetadata, structuredProfile, jsonLd } from "@/lib/seo";
 
-const anchors=["home","about","experience","skills","projects","education","beyond","contact"] as const;
-function External({href,children}:{href:string;children:React.ReactNode}){return <a href={href} target="_blank" rel="noopener noreferrer">{children}<span aria-hidden="true"> ↗</span></a>;}
-function Heading({kicker,title}:{kicker:string;title:string}){return <div className="section-title"><p className="eyebrow">{kicker}</p><h2>{title}</h2></div>;}
-function Page({lang}:{lang:Locale}){
- const t=copy[lang],other=lang==="en"?"fa":"en";
+const ui = {
+ en: {
+  back:"Home",switch:"فارسی",eyebrow:"A LITTLE MORE ABOUT ME",
+  h1:"Engineering, curiosity, and useful products.",
+  intro:"I'm Parviz Bahrami, a senior front-end developer focused on Angular, TypeScript and thoughtful, maintainable web experiences. I enjoy making complex applications simpler for the people who use them.",
+  about:"About",aboutText:"My experience spans enterprise interfaces, team collaboration, code reviews and building front-end features for business needs. I'm also exploring AI, automation and product thinking — as interests, not claims of specialist experience.",
+  experience:"Experience",experienceNote:"The end date of my latest Jumbula role has not been reconfirmed.",
+  stack:"Technologies I work with",projects:"Selected project names",
+  projectNote:"Project details and public links will be added once verified.",
+  education:"Education",educationText:"B.Sc. in Computer Software Engineering · Malayer University · 2013–2017",
+  contact:"Let's connect",contactText:"Have a front-end challenge or an idea worth exploring? I'd be glad to hear about it.",
+  email:"Email me",
+  projectNames:["Jumbula Dashboard","Jumbula Marketplace","Jumbula Widget","FamilyHub"],
+ },
+ fa: {
+  back:"خانه",switch:"English",eyebrow:"کمی بیشتر درباره من",
+  h1:"مهندسی نرم‌افزار، کنجکاوی و ساخت محصول کاربردی.",
+  intro:"من پرویز بهرامی هستم، توسعه‌دهنده ارشد فرانت‌اند با تمرکز بر Angular و TypeScript. دوست دارم نرم‌افزارهای پیچیده را به تجربه‌هایی ساده، قابل نگهداری و کاربردی تبدیل کنم.",
+  about:"درباره من",aboutText:"در توسعه رابط‌های سازمانی، همکاری تیمی، بازبینی کد و ساخت قابلیت‌های متناسب با نیاز کسب‌وکار تجربه دارم. در کنار این مسیر، هوش مصنوعی، خودکارسازی و تفکر محصول را دنبال می‌کنم؛ به‌عنوان زمینه‌های علاقه و یادگیری.",
+  experience:"سوابق حرفه‌ای",experienceNote:"تاریخ پایان آخرین سمت من در Jumbula هنوز دوباره تأیید نشده است.",
+  stack:"فناوری‌های اصلی",projects:"چند نام از پروژه‌ها",
+  projectNote:"جزئیات و لینک‌های عمومی پروژه‌ها پس از تأیید تکمیل می‌شوند.",
+  education:"تحصیلات",educationText:"کارشناسی مهندسی نرم‌افزار کامپیوتر · دانشگاه ملایر · ۲۰۱۳ تا ۲۰۱۷",
+  contact:"در ارتباط باشیم",contactText:"برای یک چالش فرانت‌اند یا ایده‌ای که ارزش بررسی دارد، خوشحال می‌شوم گفت‌وگو کنیم.",
+  email:"ارسال ایمیل",
+  projectNames:["Jumbula Dashboard","Jumbula Marketplace","Jumbula Widget","FamilyHub"],
+ },
+} as const;
+
+export async function generateMetadata({params}:{params:Promise<{lang:string}>}):Promise<Metadata>{
+ const {lang}=await params;
+ return isLocale(lang)?pageMetadata(lang,"details"):{};
+}
+
+export default async function Details({params}:{params:Promise<{lang:string}>}){
+ const {lang}=await params;
+ if(!isLocale(lang))notFound();
+ return <Profile lang={lang}/>;
+}
+
+function Profile({lang}:{lang:Locale}){
+ const t=ui[lang], fa=lang==="fa";
  return <>
-  <a className="skip-link" href="#main">{t.skip}</a>
-  <header className="site-header"><div className="wrap header-inner">
-   <Link className="wordmark" href={"/"+lang+"/details/#home"} aria-label={site.name[lang]}>{site.name[lang]}<b>.</b></Link>
-   <nav aria-label={lang==="fa"?"فهرست اصلی":"Main navigation"} className="desktop-nav">{anchors.map((id,i)=><a key={id} href={"#"+id}>{t.nav[i]}</a>)}</nav>
-   <div className="header-end"><Link className="language" href={"/"+other+"/details/"} hrefLang={other}>{lang==="en"?"FA / فارسی":"EN / English"}</Link><a className="header-contact" href="#contact">{t.contact}<span aria-hidden="true"> ↗</span></a></div>
-   </div><nav className="mobile-nav wrap" aria-label={lang==="fa"?"بخش‌های صفحه":"Page sections"}>{anchors.map((id,i)=><a href={"#"+id} key={id}>{t.nav[i]}</a>)}</nav>
-  </header>
-  <main id="main">
-   <section id="home" className="hero wrap">
-    <div className="hero-copy"><p className="eyebrow"><span className="eyebrow-mark"/> {t.eyebrow}</p>
-     <p className="hero-name">{site.name[lang]} <span>/ {site.title[lang]}</span></p>
-     <h1>{t.heroA}<br/><em>{t.heroB}</em></h1><p className="hero-description">{t.heroText}</p>
-     <div className="actions"><a className="button solid" href="#projects">{t.seeWork} <span aria-hidden="true">↗</span></a><a className="button outline" href="#contact">{t.contact} <span aria-hidden="true">↗</span></a></div>
-     <div className="hero-social"><External href={site.linkedin}>LinkedIn</External><External href={site.github}>GitHub</External><a href={"mailto:"+site.email}>Email ↗</a></div>
+  <script type="application/ld+json" dangerouslySetInnerHTML={{__html:jsonLd(structuredProfile(lang,"details"))}}/>
+  <div className="profile-page" lang={lang} dir={fa?"rtl":"ltr"}>
+   <header className="profile-header">
+    <Link href={`/${lang}/`} className="profile-back">← {t.back}</Link>
+    <Link href={`/${fa?"en":"fa"}/details/`} hrefLang={fa?"en":"fa"} className="profile-switch">{t.switch}</Link>
+   </header>
+   <main className="profile-main">
+    <div className="profile-opening">
+     <p className="profile-eyebrow">{t.eyebrow}</p>
+     <h1>{t.h1}</h1>
+     <p className="profile-lead">{t.intro}</p>
     </div>
-    <div className="portrait-frame" role="img" aria-label={t.portrait}><div className="portrait-top"><span>PARVIZ / 001</span><span>✳</span></div><div className="portrait-art"><div className="circle circle-1"/><div className="circle circle-2"/><span>PB<span className="period">.</span></span></div><p>{t.portrait}</p><div className="portrait-bottom">ENGINEERING / CURIOSITY / BUILDING</div></div>
-   </section>
-   <section id="about" className="section wrap two-column"><Heading kicker={t.introLabel} title={t.aboutTitle}/><div className="rich-copy"><p>{t.aboutText}</p><blockquote>“{t.quote}”</blockquote></div></section>
-   <section id="experience" className="section section-tint"><div className="wrap two-column"><Heading kicker={t.experienceLabel} title={t.experienceTitle}/><div><p className="helper">{t.experienceNote}</p><div className="timeline">{jobs.map((job,i)=><article className="job" key={i}><div className="job-head"><span className="job-number">0{i+1}</span><span className="job-date">{job.period[lang]}</span></div><h3>{job.title[lang]}</h3><p className="job-company">{job.company}</p><p className="job-description">{job.details[lang]}</p><div className="tags">{job.tech.map(x=><span key={x}>{x}</span>)}</div></article>)}</div></div></div></section>
-   <section id="skills" className="section wrap"><Heading kicker={t.skillsLabel} title={t.skillsTitle}/><p className="helper">{t.skillsNote}</p><div className="skills-grid">{skills.map((cat,i)=><article className="skill-group" key={cat.en}><p className="eyebrow">0{i+1}</p><h3>{cat[lang]}</h3><div className="tags">{cat.items.map(x=><span key={x}>{x}</span>)}</div></article>)}</div></section>
-   <section id="projects" className="section section-tint"><div className="wrap"><Heading kicker={t.projectsLabel} title={t.projectsTitle}/><p className="helper">{t.projectsNote}</p><div className="projects-grid">{projectNames.map((name,i)=><article className="project" key={name}><div className="project-visual"><span>{String(i+1).padStart(2,"0")}</span><div className="project-symbol" aria-hidden="true">{["◉","⌁","✳","◇"][i%4]}</div></div><div className="project-copy"><h3>{name}</h3><p>{t.pending}</p></div></article>)}</div></div></section>
-   <section id="education" className="section wrap two-column"><Heading kicker={t.educationLabel} title={t.educationTitle}/><div className="education-panel"><span className="education-mark">↗</span><h3>{t.degree}</h3><p>{t.university}</p></div></section>
-   <section id="beyond" className="section dark-section"><div className="wrap"><Heading kicker={t.beyondLabel} title={t.beyondTitle}/><p className="beyond-copy">{t.beyondText}</p><div className="interest-list">{t.interests.map((x,i)=><div key={x}><span>{String(i+1).padStart(2,"0")}</span>{x}<span aria-hidden="true">↗</span></div>)}</div></div></section>
-   <section id="contact" className="section wrap contact-section"><Heading kicker={t.contactLabel} title={t.contactTitle}/><p className="contact-intro">{t.contactText}</p><a className="contact-email" href={"mailto:"+site.email}>{site.email}<span aria-hidden="true">↗</span></a><div className="contact-details"><div><span>{t.call}</span><a href={"tel:"+site.phoneHref} dir="ltr">{site.phone}</a></div><div><span>{t.location}</span><strong>{site.location[lang]}</strong></div><div><span>Connect</span><External href={site.linkedin}>LinkedIn</External> · <External href={site.github}>GitHub</External></div></div></section>
-  </main>
-  <footer className="footer"><div className="wrap footer-inner"><span>© {new Date().getFullYear()} {site.name[lang]}</span><span>{t.footer}</span><a href="#home" aria-label="Back to top">↑</a></div></footer>
+    <section className="profile-section" aria-labelledby="profile-about"><h2 id="profile-about">{t.about}</h2><p>{t.aboutText}</p></section>
+    <section className="profile-section" aria-labelledby="profile-experience">
+     <h2 id="profile-experience">{t.experience}</h2>
+     <div className="profile-jobs">
+     {jobs.map((job,i)=><article key={i} className="profile-job">
+      <div><h3>{job.title[lang]}</h3><p className="profile-company">{job.company}</p></div>
+      <p className="profile-date">{job.period[lang]}</p>
+     </article>)}
+     </div>
+     <p className="profile-disclaimer">{t.experienceNote}</p>
+    </section>
+    <section className="profile-section" aria-labelledby="profile-stack">
+     <h2 id="profile-stack">{t.stack}</h2>
+     <div className="profile-tags">{["Angular","TypeScript","JavaScript","RxJS","NgRx","SCSS","AG Grid","Cypress"].map(x=><span key={x}>{x}</span>)}</div>
+    </section>
+    <section className="profile-section" aria-labelledby="profile-projects">
+     <h2 id="profile-projects">{t.projects}</h2>
+     <div className="profile-projects">{t.projectNames.map(name=><span key={name}>{name}</span>)}</div>
+     <p className="profile-disclaimer">{t.projectNote}</p>
+    </section>
+    <section className="profile-section" aria-labelledby="profile-education">
+     <h2 id="profile-education">{t.education}</h2><p>{t.educationText}</p>
+    </section>
+    <section className="profile-section profile-contact" aria-labelledby="profile-contact">
+     <h2 id="profile-contact">{t.contact}</h2><p>{t.contactText}</p>
+     <div className="profile-links">
+      <a href={`mailto:${site.email}`}>{t.email} ↗</a>
+      <a href={site.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
+      <a href={site.github} target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+     </div>
+    </section>
+   </main>
+   <footer className="profile-footer">© {new Date().getFullYear()} {site.name[lang]}</footer>
+  </div>
  </>;
 }
-export async function generateMetadata({params}:{params:Promise<{lang:string}>}):Promise<Metadata>{const {lang}=await params;return isLocale(lang)?pageMetadata(lang,"details"):{};}
-export default async function Home({params}:{params:Promise<{lang:string}>}){const {lang}=await params;if(!isLocale(lang))notFound();return <><script type="application/ld+json" dangerouslySetInnerHTML={{__html:jsonLd(structuredProfile(lang,"details"))}}/><Page lang={lang}/></>;}
