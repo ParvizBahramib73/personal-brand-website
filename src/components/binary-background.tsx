@@ -1,32 +1,39 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { makeBinaryGrid, radialFalloff, type BinaryDigit } from "@/lib/binary-field";
+import { ambientWave, makeBinaryGrid, radialFalloff, type BinaryDigit } from "@/lib/binary-field";
 
 const MOBILE_BREAKPOINT = 640;
 const POINTER_RADIUS = 155;
 const TOUCH_RADIUS = 135;
-const MAX_ILLUMINATION = 0.44;
+const MAX_ILLUMINATION = 0.46;
+const AMBIENT_WAVE_OPACITY = 0.043;
+const DESKTOP_SPACING = 26;
+const MOBILE_SPACING = 34;
+const DESKTOP_FRAME_MS = 1000 / 14;
+const MOBILE_FRAME_MS = 1000 / 10;
 const POSITION_EASING = 0.22;
 const OPACITY_EASING = 0.16;
 
 type PointerPosition = { x: number; y: number; strength: number };
 
 /**
- * Decorative Canvas 2D texture. Nothing animates at rest; frames are only
- * requested while the pointer is moving or the light is fading.
+ * Lightweight, low-frame-rate ambient motion with a responsive pointer light.
+ * Motion pauses when out of view and is disabled for reduced-motion users.
  */
 export function BinaryBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+    const element = canvasRef.current;
+    if (!element) return;
 
-    const context = canvas.getContext("2d", { alpha: true });
-    const staticCanvas = document.createElement("canvas");
-    const staticContext = staticCanvas.getContext("2d", { alpha: true });
-    if (!context || !staticContext) return;
+    const maybeContext = element.getContext("2d", { alpha: true });
+    if (!maybeContext) return;
+
+    // Non-null aliases remain narrowed inside event handlers and animation callbacks.
+    const canvas = element;
+    const context = maybeContext;
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const darkTheme = window.matchMedia("(prefers-color-scheme: dark)");
@@ -39,6 +46,10 @@ export function BinaryBackground() {
     let radius = POINTER_RADIUS;
     let lastFrameTime = 0;
     let active = false;
+    let inView = true;
+    let frameInterval = DESKTOP_FRAME_MS;
+    let baseRgb = "78, 88, 91";
+    let highlightRgb = "50, 86, 96";
 
     const current: PointerPosition = { x: 0, y: 0, strength: 0 };
     const target: PointerPosition = { x: 0, y: 0, strength: 0 };
@@ -49,29 +60,41 @@ export function BinaryBackground() {
       ctx.textAlign = "center";
     }
 
-    function draw() {
-      if (!context || width === 0 || height === 0) return;
+    function draw(now: number) {
+      if (width === 0 || height === 0) return;
 
-      context.clearRect(0, 0, width, height);
-      context.drawImage(staticCanvas, 0, 0, width, height);
-
-      if (current.strength < 0.005 || reducedMotion.matches) return;
-
-      const rgb = darkTheme.matches ? "174, 184, 187" : "77, 88, 91";
+      const still = reducedMotion.matches;
+      const seconds = now / 1000;
       const radiusSquared = radius * radius;
 
+      context.clearRect(0, 0, width, height);
+
       for (const digit of digits) {
-        const dx = digit.x - current.x;
-        const dy = digit.y - current.y;
+        const x = still
+          ? digit.x
+          : digit.x + Math.sin(seconds * 0.24 * digit.speed + digit.phase) * digit.driftX;
+        const y = still
+          ? digit.y
+          : digit.y + Math.cos(seconds * 0.21 * digit.speed + digit.phase) * digit.driftY;
+        const wave = still ? 0 : ambientWave(x, y, seconds);
+        const opacity = Math.min(0.14, digit.opacity + AMBIENT_WAVE_OPACITY * wave);
+
+        context.fillStyle = `rgba(${baseRgb}, ${opacity})`;
+        context.fillText(digit.value, x, y);
+
+        if (still || current.strength < 0.005) continue;
+
+        const dx = x - current.x;
+        const dy = y - current.y;
         const distanceSquared = dx * dx + dy * dy;
         if (distanceSquared >= radiusSquared) continue;
 
-        const glow = radialFalloff(Math.sqrt(distanceSquared), radius);
-        const opacity = glow * current.strength * MAX_ILLUMINATION;
-        if (opacity < 0.006) continue;
+        const glow =
+          radialFalloff(Math.sqrt(distanceSquared), radius) * current.strength * MAX_ILLUMINATION;
+        if (glow < 0.006) continue;
 
-        context.fillStyle = `rgba(${rgb}, ${opacity})`;
-        context.fillText(digit.value, digit.x, digit.y);
+        context.fillStyle = `rgba(${highlightRgb}, ${glow})`;
+        context.fillText(digit.value, x, y);
       }
     }
 
@@ -83,7 +106,7 @@ export function BinaryBackground() {
     }
 
     function scheduleFrame() {
-      if (frame === null && !document.hidden && !reducedMotion.matches) {
+      if (frame === null && inView && !document.hidden && !reducedMotion.matches) {
         frame = window.requestAnimationFrame(animate);
       }
     }
@@ -91,8 +114,8 @@ export function BinaryBackground() {
     function animate(now: number) {
       frame = null;
 
-      // Cap active animation to about 30fps on high-refresh-rate screens.
-      if (now - lastFrameTime < 30) {
+      // Low frame rate is enough for slow ambient waves and saves battery.
+      if (now - lastFrameTime < frameInterval) {
         scheduleFrame();
         return;
       }
@@ -102,63 +125,52 @@ export function BinaryBackground() {
       current.y += (target.y - current.y) * POSITION_EASING;
       current.strength += (target.strength - current.strength) * OPACITY_EASING;
 
-      const moving =
-        Math.abs(current.x - target.x) > 0.4 ||
-        Math.abs(current.y - target.y) > 0.4 ||
-        Math.abs(current.strength - target.strength) > 0.006;
-
-      if (!moving) {
-        current.x = target.x;
-        current.y = target.y;
-        current.strength = target.strength;
-      }
-
-      draw();
-      if (moving) scheduleFrame();
+      draw(now);
+      scheduleFrame();
     }
 
     function rebuild() {
-      if (!canvas || !context || !staticContext) return;
-
       const bounds = canvas.getBoundingClientRect();
       width = Math.round(bounds.width);
       height = Math.round(bounds.height);
-      if (width === 0 || height === 0) return;
+      if (width === 0 || height === 0) {
+        cancelFrame();
+        return;
+      }
 
-      // Respect device resolution without allocating oversized GPU buffers.
+      // Limit high-density canvas allocations on small and large screens.
       ratio = Math.min(
         window.devicePixelRatio || 1,
         2,
         Math.max(0.75, Math.sqrt(2_600_000 / (width * height))),
       );
-      const pixelWidth = Math.max(1, Math.round(width * ratio));
-      const pixelHeight = Math.max(1, Math.round(height * ratio));
-
-      canvas.width = pixelWidth;
-      canvas.height = pixelHeight;
-      staticCanvas.width = pixelWidth;
-      staticCanvas.height = pixelHeight;
+      canvas.width = Math.max(1, Math.round(width * ratio));
+      canvas.height = Math.max(1, Math.round(height * ratio));
 
       context.setTransform(ratio, 0, 0, ratio, 0, 0);
-      staticContext.setTransform(ratio, 0, 0, ratio, 0, 0);
       paintSettings(context);
-      paintSettings(staticContext);
 
       const mobile = width <= MOBILE_BREAKPOINT;
-      const spacing = mobile ? 40 : 32;
       radius = mobile ? TOUCH_RADIUS : POINTER_RADIUS;
-      digits = makeBinaryGrid(width, height, spacing);
+      frameInterval = mobile ? MOBILE_FRAME_MS : DESKTOP_FRAME_MS;
+      digits = makeBinaryGrid(width, height, mobile ? MOBILE_SPACING : DESKTOP_SPACING);
 
-      staticContext.clearRect(0, 0, width, height);
-      const baseRgb = darkTheme.matches ? "153, 164, 168" : "78, 88, 91";
+      const tokens = getComputedStyle(document.documentElement);
+      const fallbackBase = darkTheme.matches ? "123, 153, 161" : "78, 88, 91";
+      const fallbackHighlight = darkTheme.matches ? "160, 204, 213" : "50, 86, 96";
+      baseRgb = tokens.getPropertyValue("--binary-base-rgb").trim() || fallbackBase;
+      highlightRgb = tokens.getPropertyValue("--binary-highlight-rgb").trim() || fallbackHighlight;
 
-      for (const digit of digits) {
-        staticContext.fillStyle = `rgba(${baseRgb}, ${digit.opacity})`;
-        staticContext.fillText(digit.value, digit.x, digit.y);
+      if (reducedMotion.matches) {
+        cancelFrame();
+        active = false;
+        target.strength = 0;
+        current.strength = 0;
+        draw(0);
+      } else {
+        draw(performance.now());
+        scheduleFrame();
       }
-
-      draw();
-      if (target.strength > 0) scheduleFrame();
     }
 
     function clearLight() {
@@ -215,25 +227,37 @@ export function BinaryBackground() {
     }
 
     function onReducedMotionChange() {
-      if (!reducedMotion.matches) return;
-      cancelFrame();
-      active = false;
-      target.strength = 0;
-      current.strength = 0;
-      draw();
+      rebuild();
     }
 
     function onVisibilityChange() {
-      if (!document.hidden) return;
-      cancelFrame();
-      active = false;
-      target.strength = 0;
-      current.strength = 0;
-      draw();
+      if (document.hidden) {
+        cancelFrame();
+        active = false;
+        target.strength = 0;
+        current.strength = 0;
+      } else {
+        scheduleFrame();
+      }
     }
 
     const observer = new ResizeObserver(rebuild);
     observer.observe(canvas.parentElement ?? canvas);
+    const visibilityObserver =
+      typeof IntersectionObserver !== "undefined"
+        ? new IntersectionObserver(([entry]) => {
+            inView = Boolean(entry?.isIntersecting);
+            if (!inView) {
+              cancelFrame();
+              active = false;
+              target.strength = 0;
+              current.strength = 0;
+            } else {
+              scheduleFrame();
+            }
+          })
+        : null;
+    visibilityObserver?.observe(canvas);
     rebuild();
 
     window.addEventListener("pointermove", onPointerMove, { passive: true });
@@ -249,6 +273,7 @@ export function BinaryBackground() {
 
     return () => {
       observer.disconnect();
+      visibilityObserver?.disconnect();
       cancelFrame();
       window.removeEventListener("pointermove", onPointerMove);
       window.removeEventListener("pointerout", onPointerOut);

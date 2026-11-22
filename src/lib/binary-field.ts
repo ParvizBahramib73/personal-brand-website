@@ -3,6 +3,10 @@ export type BinaryDigit = Readonly<{
   y: number;
   value: "0" | "1";
   opacity: number;
+  driftX: number;
+  driftY: number;
+  phase: number;
+  speed: number;
 }>;
 
 /** Deterministic texture: resize does not introduce animated visual noise. */
@@ -29,12 +33,23 @@ export function makeBinaryGrid(width: number, height: number, spacing: number): 
         x,
         y,
         value: noise(row, column, 3) > 0.5 ? "1" : "0",
-        opacity: 0.033 + noise(row, column, 4) * 0.026,
+        opacity: 0.038 + noise(row, column, 4) * 0.034,
+        driftX: 0.6 + noise(row, column, 5) * 0.8,
+        driftY: 0.6 + noise(row, column, 6) * 0.8,
+        phase: noise(row, column, 7) * Math.PI * 2,
+        speed: 0.65 + noise(row, column, 8) * 0.55,
       });
     }
   }
 
   return digits;
+}
+
+/** Soft diagonal wave, returning a smoothly moving crest in [0, 1]. */
+export function ambientWave(x: number, y: number, seconds: number): number {
+  const phase = x * 0.012 + y * 0.009 - seconds * 0.42;
+  const value = (1 + Math.sin(phase)) / 2;
+  return value * value * value * value;
 }
 
 /** Smooth edge with zero added illumination at and beyond the radius. */
