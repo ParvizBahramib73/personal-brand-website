@@ -7,8 +7,8 @@
   --color-border: #d9e0df;
   --color-accent: #326e7b;
   --color-focus: #286d83;
-  --binary-base-rgb: 78, 88, 91;
-  --binary-highlight-rgb: 50, 86, 96;
+  --binary-base-rgb: 65, 81, 88;
+  --binary-highlight-rgb: 45, 87, 100;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -21,7 +21,7 @@
     --color-border: #39484c;
     --color-accent: #a0ccd5;
     --color-focus: #d1f3f8;
-    --binary-base-rgb: 123, 153, 161;
-    --binary-highlight-rgb: 160, 204, 213;
+    --binary-base-rgb: 137, 186, 195;
+    --binary-highlight-rgb: 160, 215, 225;
   }
 }

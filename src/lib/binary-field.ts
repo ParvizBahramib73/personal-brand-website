@@ -33,7 +33,7 @@ export function makeBinaryGrid(width: number, height: number, spacing: number): 
         x,
         y,
         value: noise(row, column, 3) > 0.5 ? "1" : "0",
-        opacity: 0.038 + noise(row, column, 4) * 0.034,
+        opacity: 0.12 + noise(row, column, 4) * 0.075,
         driftX: 0.6 + noise(row, column, 5) * 0.8,
         driftY: 0.6 + noise(row, column, 6) * 0.8,
         phase: noise(row, column, 7) * Math.PI * 2,
