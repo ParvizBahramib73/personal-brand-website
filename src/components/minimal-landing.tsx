@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { SocialLinks } from "@/components/social-links";
+import { BinaryBackground } from "@/components/binary-background";
 import { messages } from "@/content/messages";
 import { alternateLocale, assetPath, localePath, site, type Locale } from "@/lib/site";
 
@@ -27,6 +28,7 @@ export function MinimalLanding({ lang }: { lang: Locale }) {
 
   return (
     <main className="minimal-page" lang={lang} dir={lang === "fa" ? "rtl" : "ltr"}>
+      <BinaryBackground />
       <Link
         className="minimal-language"
         href={localePath(nextLocale)}
