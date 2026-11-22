@@ -1,24 +1,33 @@
 import { strict as assert } from "node:assert";
 import { test } from "node:test";
-import { makeBinaryGrid, radialFalloff } from "../src/lib/binary-field";
+import { ambientWave, makeBinaryGrid, radialFalloff } from "../src/lib/binary-field";
 
 test("binary grid is deterministic and stays within the canvas", () => {
-  const digits = makeBinaryGrid(320, 240, 40);
+  const digits = makeBinaryGrid(320, 240, 34);
   assert.ok(digits.length > 0);
-  assert.deepEqual(makeBinaryGrid(320, 240, 40), digits);
+  assert.deepEqual(makeBinaryGrid(320, 240, 34), digits);
 
   for (const digit of digits) {
     assert.ok(digit.x >= 0 && digit.x <= 320);
     assert.ok(digit.y >= 0 && digit.y <= 240);
     assert.ok(digit.value === "0" || digit.value === "1");
-    assert.ok(digit.opacity >= 0.03 && digit.opacity <= 0.07);
+    assert.ok(digit.opacity >= 0.038 && digit.opacity <= 0.073);
+    assert.ok(digit.driftX >= 0.6 && digit.driftX <= 1.4);
+    assert.ok(digit.driftY >= 0.6 && digit.driftY <= 1.4);
   }
 });
 
 test("grid density is lower on mobile", () => {
-  const dense = makeBinaryGrid(400, 800, 32);
-  const sparse = makeBinaryGrid(400, 800, 40);
+  const dense = makeBinaryGrid(400, 800, 26);
+  const sparse = makeBinaryGrid(400, 800, 34);
   assert.ok(sparse.length < dense.length);
+});
+
+test("ambient wave is bounded, time-dependent and smoothly changing", () => {
+  const samples = Array.from({ length: 100 }, (_, i) => ambientWave(i * 27, 140, i * 0.15));
+  assert.ok(samples.every((value) => value >= 0 && value <= 1));
+  assert.notEqual(ambientWave(130, 180, 0), ambientWave(130, 180, 5));
+  assert.ok(Math.abs(ambientWave(130, 180, 1) - ambientWave(130, 180, 1.001)) < 0.01);
 });
 
 test("illumination is smooth and reaches zero at the boundary", () => {
