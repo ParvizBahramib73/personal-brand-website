@@ -16,7 +16,7 @@ function ProfileSection({
   className?: string;
 }) {
   return (
-    <section className={\`profile-section \${className}\`.trim()} aria-labelledby={id}>
+    <section className={`profile-section ${className}`.trim()} aria-labelledby={id}>
       <h2 id={id}>{title}</h2>
       {children}
     </section>
@@ -98,7 +98,7 @@ export function ProfilePage({ lang }: { lang: Locale }) {
         <ProfileSection id="profile-contact" title={t.contactHeading} className="profile-contact">
           <p>{t.contactBody}</p>
           <div className="profile-links">
-            <a href={\`mailto:\${site.email}\`}>{t.email} ↗</a>
+            <a href={`mailto:${site.email}`}>{t.email} ↗</a>
             <a href={site.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
             <a href={site.github} target="_blank" rel="noopener noreferrer">GitHub ↗</a>
           </div>

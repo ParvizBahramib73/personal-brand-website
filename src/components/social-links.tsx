@@ -27,7 +27,7 @@ function SocialIcon({ platform }: { platform: SocialPlatform }) {
 const links = [
   { platform: "github", label: "GitHub", href: site.github },
   { platform: "linkedin", label: "LinkedIn", href: site.linkedin },
-  { platform: "email", label: "Email", href: \`mailto:\${site.email}\` },
+  { platform: "email", label: "Email", href: `mailto:${site.email}` },
 ] as const satisfies ReadonlyArray<{ platform: SocialPlatform; label: string; href: string }>;
 
 export function SocialLinks({ label }: { label: string }) {

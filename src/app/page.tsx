@@ -6,11 +6,11 @@ import { jsonLd, pageMetadata, structuredProfile } from "@/lib/seo";
 export const metadata: Metadata = {
   ...pageMetadata("en", "home"),
   alternates: {
-    canonical: \`\${site.url}/\`,
+    canonical: `${site.url}/`,
     languages: {
-      en: \`\${site.url}\${localePath("en")}\`,
-      fa: \`\${site.url}\${localePath("fa")}\`,
-      "x-default": \`\${site.url}/\`,
+      en: `${site.url}${localePath("en")}`,
+      fa: `${site.url}${localePath("fa")}`,
+      "x-default": `${site.url}/`,
     },
   },
 };

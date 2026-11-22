@@ -26,10 +26,10 @@ export function alternateLocale(locale: Locale): Locale {
 
 /** Next.js Link resolves the configured basePath automatically. */
 export function localePath(locale: Locale, section: Section = "home"): string {
-  return section === "home" ? \`/\${locale}/\` : \`/\${locale}/details/\`;
+  return section === "home" ? `/${locale}/` : `/${locale}/details/`;
 }
 
 /** Public assets referenced by plain HTML elements need the Pages basePath. */
 export function assetPath(filename: string): string {
-  return \`\${site.basePath}/\${filename}\`;
+  return `${site.basePath}/${filename}`;
 }
