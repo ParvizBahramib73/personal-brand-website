@@ -41,9 +41,9 @@ export function MinimalLanding({ lang }: { lang: Locale }) {
       <div className="minimal-center">
         <Image
           className="minimal-portrait"
-          src={assetPath("parviz-photo.svg")}
-          width={180}
-          height={180}
+          src={assetPath("parviz-photo-cover.webp")}
+          width={256}
+          height={256}
           alt={t.portraitAlt}
           priority
           unoptimized
