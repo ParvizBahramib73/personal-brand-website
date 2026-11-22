@@ -7,8 +7,8 @@ export const site = {
   location: { en: "Tehran, Iran", fa: "تهران، ایران" },
   linkedin: "https://www.linkedin.com/in/parviz-bahrami-b9030b123",
   github: "https://github.com/ParvizBahramib73",
-  // Vercel URL should be set when it is known. Do not invent a live domain.
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+  // GitHub Pages project URL. Replace when a custom domain is connected.
+  url: "https://parvizbahramib73.github.io/personal-brand-website",
 } as const;
 
 export type Locale = "en" | "fa";
