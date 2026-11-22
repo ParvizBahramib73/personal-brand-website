@@ -20,7 +20,7 @@ test("canonical and hreflang are localized, unique and reciprocal", () => {
 test("Person structured data uses confirmed identity and public links", () => {
   const data = structuredProfile("en", "details");
   const person = data["@graph"].find((entry) => entry["@type"] === "Person");
-  assert.ok(person);
+  assert.ok(person && "sameAs" in person);
   assert.equal(person.name, "Parviz Bahrami");
   assert.deepEqual(person.sameAs, [site.linkedin, site.github]);
 });
