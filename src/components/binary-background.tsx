@@ -25,11 +25,15 @@ export function BinaryBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+    const element = canvasRef.current;
+    if (!element) return;
 
-    const context = canvas.getContext("2d", { alpha: true });
-    if (!context) return;
+    const maybeContext = element.getContext("2d", { alpha: true });
+    if (!maybeContext) return;
+
+    // Non-null aliases remain narrowed inside event handlers and animation callbacks.
+    const canvas = element;
+    const context = maybeContext;
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const darkTheme = window.matchMedia("(prefers-color-scheme: dark)");
