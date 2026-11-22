@@ -3,7 +3,6 @@ import type {Metadata} from "next";
 import {notFound} from "next/navigation";
 import {isLocale,site} from "@/lib/site";
 import "../globals.css";
-
 export function generateStaticParams(){return [{lang:"en"},{lang:"fa"}];}
 export async function generateMetadata({params}:{params:Promise<{lang:string}>}):Promise<Metadata>{
  const {lang}=await params;if(!isLocale(lang))return {};
@@ -13,5 +12,5 @@ export async function generateMetadata({params}:{params:Promise<{lang:string}>})
 }
 export default async function LocaleLayout({children,params}:{children:ReactNode;params:Promise<{lang:string}>}){
  const {lang}=await params;if(!isLocale(lang))notFound();
- return <html lang={lang} dir={lang==="fa"?"rtl":"ltr"}><body>{children}</body></html>;
+ return <div className="locale-root" lang={lang} dir={lang==="fa"?"rtl":"ltr"}>{children}</div>;
 }
