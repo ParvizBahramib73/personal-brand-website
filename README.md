@@ -1,59 +1,51 @@
-# Parviz Bahrami — Personal Brand Website
+# Parviz Bahrami — Personal Website
 
-Bilingual (English and Persian) editorial personal brand website for Parviz Bahrami, Senior Front-end Developer.
+A minimal bilingual portfolio for a senior front-end developer. Built with **Next.js 15**, **TypeScript** and plain CSS, statically hosted on **GitHub Pages**.
 
-## Included
+## Run locally
 
-- English default at `/en`, Persian RTL at `/fa`
-- Responsive editorial landing page: hero, about, career timeline, skills, project index, education, interests, and contact
-- Verified contact links (LinkedIn, GitHub, email, phone)
-- Structured editable content under `src/lib/site.ts` and `src/lib/copy.ts`
-- Per-locale metadata, Open Graph image, sitemap and robots route
-- GitHub Actions workflow for typechecking and build
+Requirements: Node.js 22+
 
-## Local development
-
-Requires Node.js 22+.
-
-```bash
-npm install
+```sh
+npm ci
 npm run dev
+```
+
+The default entry route is `/`, and translated routes are `/en/` and `/fa/`. Career details are at `/en/details/` and `/fa/details/`.
+
+## Quality checks
+
+```sh
+npm run format:check
+npm run lint
 npm run typecheck
+npm run test
 npm run build
 ```
 
-Open http://localhost:3000 (redirects to /en).
+Format code with `npm run format`. GitHub Actions runs the checks on pull requests and before deployment.
 
-## Deploy to GitHub Pages
+## Folder structure
 
-1. The site uses Next.js `output: "export"`; the static build is written to `out/`.
-2. In repository **Settings → Pages → Build and deployment**, choose **GitHub Actions**.
-3. Merge the feature pull request into `master` to trigger `.github/workflows/deploy-pages.yml`.
-4. Check the **Actions** tab for a successful build and deploy. The intended URL is https://parvizbahramib73.github.io/personal-brand-website/.
-5. GitHub Pages availability for a **private** repository depends on the account plan. If Pages cannot be enabled, switch the repository to **Public** under **Settings → General → Danger Zone** before deploying. This makes source history publicly visible. Do not publish private assets or secrets.
-6. A custom domain can be configured later; update `src/lib/site.ts` canonical URL and `next.config.ts` `basePath` for that change.
+| Folder           | Responsibility                                  |
+| ---------------- | ----------------------------------------------- |
+| `src/app`        | Next.js routes, static metadata and sitemap     |
+| `src/components` | Small presentational components                 |
+| `src/content`    | Verified professional facts and translated copy |
+| `src/lib`        | Shared routing and SEO helpers                  |
+| `src/styles`     | Theme tokens, base, landing and profile styles  |
+| `tests`          | Routing, translation and SEO regression tests   |
 
-**Hosting is GitHub Pages, not Vercel.** The published site is static; the contact option is a direct email link, not a server-side form.
+The current live photo is the owner's **original photograph**. No AI-generated portrait replaces it.
 
-## Content updates
+## Publish
 
-- Name, professional title, public contact, job history, skills and project names: `src/lib/site.ts`
-- English and natural Persian text: `src/lib/copy.ts`
-- Styling: `src/app/globals.css`
-- Metadata: `src/app/[lang]/layout.tsx`
+The site exports static HTML to `out/`, then the workflow `.github/workflows/deploy-pages.yml` deploys it to GitHub Pages from `master`. The base path is `/personal-brand-website`.
 
-Professional project details and links are deliberately withheld until provided. There is no invented work metric, testimonial, employer, demo or screenshot.
+Production: https://parvizbahramib73.github.io/personal-brand-website/
 
-## Open items before full launch
+For content changes, edit `src/content/profile.ts` (verified facts) or `src/content/messages.ts` (English/Persian wording). For domain changes, update `src/lib/site.ts`, `next.config.ts` and SEO URLs.
 
-- Confirm whether the Front-end Team Lead role continues after the originally documented period (Feb 2021 onwards)
-- Supply a real profile portrait with permission to publish
-- Supply a reviewed PDF resume before enabling a download CTA
-- Supply project-specific descriptions, public screenshots, contribution details and links
-- Confirm whether publicly displaying the supplied phone number is desirable
-- Enable GitHub Pages Actions and verify live URL, preview card, browser accessibility and mobile RTL
-- A full contact form is intentionally not enabled; currently the reliable contact route is a direct `mailto:` link. A secure form needs a configured backend/mail service and anti-spam controls.
+See [Architecture and maintenance](docs/ARCHITECTURE.md) and [SEO notes](docs/SEO.md).
 
-## Status
-
-Feature implementation committed for review. GitHub CI is configured, but a passing CI build and deployment have **not yet been verified**.
+Do not add fabricated projects, achievements, employment claims or published article URLs. Project names intentionally have no invented case studies.

@@ -2,13 +2,13 @@
 
 ## Pages and intent
 
-| URL | Intent | Language |
-| --- | --- | --- |
-| `/` | Canonical neutral homepage / international entry | English default |
-| `/en/` | Personal introduction and quick profile | English |
-| `/fa/` | معرفی شخصی | Persian |
-| `/en/details/` | Professional background, Angular work, experience, projects | English |
-| `/fa/details/` | سوابق، مهارت‌های Angular و پروژه‌ها | Persian |
+| URL            | Intent                                                      | Language        |
+| -------------- | ----------------------------------------------------------- | --------------- |
+| `/`            | Canonical neutral homepage / international entry            | English default |
+| `/en/`         | Personal introduction and quick profile                     | English         |
+| `/fa/`         | معرفی شخصی                                                  | Persian         |
+| `/en/details/` | Professional background, Angular work, experience, projects | English         |
+| `/fa/details/` | سوابق، مهارت‌های Angular و پروژه‌ها                         | Persian         |
 
 Each page has a self-referencing canonical URL, except no invented regional targeting. Both language versions point to each other using reciprocal hreflang annotations; `x-default` points to the general entry (or English details). The XML sitemap lists all five URLs and these alternates.
 
