@@ -46,8 +46,7 @@ test("Mexican wave is bounded, smooth and has no visible loop seam", () => {
   assert.equal(mexicanWave(120, 80, 0, 600, 400), 0);
   assert.equal(mexicanWave(120, 80, 8, 600, 400), 0);
   assert.ok(
-    Math.abs(mexicanWave(120, 80, 2.4, 600, 400) - mexicanWave(120, 80, 2.401, 600, 400)) <
-      0.01,
+    Math.abs(mexicanWave(120, 80, 2.4, 600, 400) - mexicanWave(120, 80, 2.401, 600, 400)) < 0.01,
   );
   assert.equal(mexicanWave(120, 80, 2, 0, 400), 0);
 });
