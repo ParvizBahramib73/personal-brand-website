@@ -22,7 +22,7 @@ test("Person structured data uses confirmed identity and public links", () => {
   const person = data["@graph"].find((entry) => entry["@type"] === "Person");
   assert.ok(person && "sameAs" in person);
   assert.equal(person.name, "Parviz Bahrami");
-  assert.deepEqual(person.sameAs, [site.linkedin, site.github]);
+  assert.deepEqual(person.sameAs, [site.linkedin, site.github, site.instagram]);
 });
 
 test("JSON-LD serialization neutralizes HTML-open brackets", () => {

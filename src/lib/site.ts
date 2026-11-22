@@ -10,6 +10,8 @@ export const site = {
   email: "rozbehb73@gmail.com",
   linkedin: "https://www.linkedin.com/in/parviz-bahrami-b9030b123",
   github: "https://github.com/ParvizBahramib73",
+  instagram: "https://www.instagram.com/parviz_bahrami73/",
+  whatsapp: "https://wa.me/qr/PVUVUWODJBVDF1",
 } as const;
 
 export const locales = ["en", "fa"] as const;
