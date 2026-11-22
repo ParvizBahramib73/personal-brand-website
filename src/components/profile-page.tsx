@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { experience, coreSkills, selectedProjects } from "@/content/profile";
+import { socialLinks } from "@/content/social-links";
 import { messages } from "@/content/messages";
 import { alternateLocale, localePath, site, type Locale } from "@/lib/site";
 
@@ -98,13 +99,15 @@ export function ProfilePage({ lang }: { lang: Locale }) {
         <ProfileSection id="profile-contact" title={t.contactHeading} className="profile-contact">
           <p>{t.contactBody}</p>
           <div className="profile-links">
-            <a href={`mailto:${site.email}`}>{t.email} ↗</a>
-            <a href={site.linkedin} target="_blank" rel="noopener noreferrer">
-              LinkedIn ↗
-            </a>
-            <a href={site.github} target="_blank" rel="noopener noreferrer">
-              GitHub ↗
-            </a>
+            {socialLinks.map(({ platform, label, href, external }) => (
+              <a
+                key={platform}
+                href={href}
+                {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+              >
+                {platform === "email" ? t.email : label} <span aria-hidden="true">↗</span>
+              </a>
+            ))}
           </div>
         </ProfileSection>
       </main>

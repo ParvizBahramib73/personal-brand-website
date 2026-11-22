@@ -107,7 +107,7 @@ export function structuredProfile(locale: Locale, page: PageKind) {
     jobTitle: site.title[locale],
     description: searchCopy[locale][page].description,
     email: `mailto:${site.email}`,
-    sameAs: [site.linkedin, site.github],
+    sameAs: [site.linkedin, site.github, site.instagram],
     knowsAbout: [
       "Angular",
       "TypeScript",
