@@ -118,7 +118,7 @@ export function structuredProfile(locale: Locale, page: PageKind) {
       "NgRx",
     ],
     alumniOf: { "@type": "CollegeOrUniversity", name: "Malayer University" },
-    image: `${site.url}/parviz-photo.svg`,
+    image: `${site.url}/parviz-photo-cover.webp`,
   };
 
   return {

@@ -17,6 +17,9 @@ test("language switcher is reversible", () => {
 test("link paths work with the GitHub Pages base path", () => {
   assert.equal(localePath("en"), "/en/");
   assert.equal(localePath("fa", "details"), "/fa/details/");
-  assert.equal(assetPath("parviz-photo.svg"), "/personal-brand-website/parviz-photo.svg");
+  assert.equal(
+    assetPath("parviz-photo-cover.webp"),
+    "/personal-brand-website/parviz-photo-cover.webp",
+  );
   assert.equal(site.url.endsWith(site.basePath), true);
 });
