@@ -2,7 +2,6 @@ import type {ReactNode} from "react";
 import type {Metadata} from "next";
 import {notFound} from "next/navigation";
 import {isLocale,site} from "@/lib/site";
-import "../globals.css";
 export function generateStaticParams(){return [{lang:"en"},{lang:"fa"}];}
 export async function generateMetadata({params}:{params:Promise<{lang:string}>}):Promise<Metadata>{
  const {lang}=await params;if(!isLocale(lang))return {};
