@@ -5,7 +5,15 @@ type SocialPlatform = "github" | "linkedin" | "email";
 function SocialIcon({ platform }: { platform: SocialPlatform }) {
   if (platform === "email") {
     return (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
         <rect x="2.8" y="5" width="18.4" height="14" rx="2" />
         <path d="m3.6 6.2 8.4 6.8 8.4-6.8" />
       </svg>

@@ -48,14 +48,12 @@ export const messages = {
       aboutBody:
         "My experience spans enterprise interfaces, team collaboration, code reviews and building front-end features for business needs. I'm also exploring AI, automation and product thinking — as interests, not claims of specialist experience.",
       experienceHeading: "Experience",
-      experienceNote:
-        "The end date of my latest Jumbula role has not been reconfirmed.",
+      experienceNote: "The end date of my latest Jumbula role has not been reconfirmed.",
       skillsHeading: "Technologies I work with",
       projectsHeading: "Selected project names",
       projectsNote: "Project details and public links will be added once verified.",
       educationHeading: "Education",
-      educationBody:
-        "B.Sc. in Computer Software Engineering · Malayer University · 2013–2017",
+      educationBody: "B.Sc. in Computer Software Engineering · Malayer University · 2013–2017",
       contactHeading: "Let's connect",
       contactBody:
         "Have a front-end challenge or an idea worth exploring? I'd be glad to hear about it.",
@@ -80,14 +78,12 @@ export const messages = {
       aboutBody:
         "در توسعه رابط‌های سازمانی، همکاری تیمی، بازبینی کد و ساخت قابلیت‌های متناسب با نیاز کسب‌وکار تجربه دارم. در کنار این مسیر، هوش مصنوعی، خودکارسازی و تفکر محصول را دنبال می‌کنم؛ به‌عنوان زمینه‌های علاقه و یادگیری.",
       experienceHeading: "سوابق حرفه‌ای",
-      experienceNote:
-        "تاریخ پایان آخرین سمت من در Jumbula هنوز دوباره تأیید نشده است.",
+      experienceNote: "تاریخ پایان آخرین سمت من در Jumbula هنوز دوباره تأیید نشده است.",
       skillsHeading: "فناوری‌های اصلی",
       projectsHeading: "چند نام از پروژه‌ها",
       projectsNote: "جزئیات و لینک‌های عمومی پروژه‌ها پس از تأیید تکمیل می‌شوند.",
       educationHeading: "تحصیلات",
-      educationBody:
-        "کارشناسی مهندسی نرم‌افزار کامپیوتر · دانشگاه ملایر · ۲۰۱۳ تا ۲۰۱۷",
+      educationBody: "کارشناسی مهندسی نرم‌افزار کامپیوتر · دانشگاه ملایر · ۲۰۱۳ تا ۲۰۱۷",
       contactHeading: "در ارتباط باشیم",
       contactBody:
         "برای یک چالش فرانت‌اند یا ایده‌ای که ارزش بررسی دارد، خوشحال می‌شوم گفت‌وگو کنیم.",

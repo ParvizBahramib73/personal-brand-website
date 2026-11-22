@@ -99,13 +99,19 @@ export function ProfilePage({ lang }: { lang: Locale }) {
           <p>{t.contactBody}</p>
           <div className="profile-links">
             <a href={`mailto:${site.email}`}>{t.email} ↗</a>
-            <a href={site.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
-            <a href={site.github} target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+            <a href={site.linkedin} target="_blank" rel="noopener noreferrer">
+              LinkedIn ↗
+            </a>
+            <a href={site.github} target="_blank" rel="noopener noreferrer">
+              GitHub ↗
+            </a>
           </div>
         </ProfileSection>
       </main>
 
-      <footer className="profile-footer">© {new Date().getFullYear()} {site.name[lang]}</footer>
+      <footer className="profile-footer">
+        © {new Date().getFullYear()} {site.name[lang]}
+      </footer>
     </div>
   );
 }

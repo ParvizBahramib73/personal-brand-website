@@ -26,14 +26,14 @@ Format code with `npm run format`. GitHub Actions runs the checks on pull reques
 
 ## Folder structure
 
-| Folder | Responsibility |
-| --- | --- |
-| `src/app` | Next.js routes, static metadata and sitemap |
-| `src/components` | Small presentational components |
-| `src/content` | Verified professional facts and translated copy |
-| `src/lib` | Shared routing and SEO helpers |
-| `src/styles` | Theme tokens, base, landing and profile styles |
-| `tests` | Routing, translation and SEO regression tests |
+| Folder           | Responsibility                                  |
+| ---------------- | ----------------------------------------------- |
+| `src/app`        | Next.js routes, static metadata and sitemap     |
+| `src/components` | Small presentational components                 |
+| `src/content`    | Verified professional facts and translated copy |
+| `src/lib`        | Shared routing and SEO helpers                  |
+| `src/styles`     | Theme tokens, base, landing and profile styles  |
+| `tests`          | Routing, translation and SEO regression tests   |
 
 The current live photo is the owner's **original photograph**. No AI-generated portrait replaces it.
 

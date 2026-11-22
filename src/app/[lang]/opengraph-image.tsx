@@ -8,11 +8,7 @@ export function generateStaticParams() {
   return locales.map((lang) => ({ lang }));
 }
 
-export default async function OpenGraphImage({
-  params,
-}: {
-  params: Promise<{ lang: string }>;
-}) {
+export default async function OpenGraphImage({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params;
   const locale = isLocale(lang) ? lang : "en";
 
