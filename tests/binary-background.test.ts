@@ -1,6 +1,6 @@
 import { strict as assert } from "node:assert";
 import { test } from "node:test";
-import { ambientWave, makeBinaryGrid, radialFalloff } from "../src/lib/binary-field";
+import { makeBinaryGrid, mexicanWave, radialFalloff } from "../src/lib/binary-field";
 
 test("binary grid is deterministic and stays within the canvas", () => {
   const digits = makeBinaryGrid(320, 240, 34);
@@ -23,11 +23,28 @@ test("grid density is lower on mobile", () => {
   assert.ok(sparse.length < dense.length);
 });
 
-test("ambient wave is bounded, time-dependent and smoothly changing", () => {
-  const samples = Array.from({ length: 100 }, (_, i) => ambientWave(i * 27, 140, i * 0.15));
+test("Mexican wave rises and settles in sequence from left to right", () => {
+  const width = 600;
+  const height = 400;
+  const arrival = (x: number, y: number) =>
+    ((x + y * 0.12 + 165) / (width + height * 0.12 + 330)) * 8;
+  const leftArrival = arrival(120, 80);
+  const rightArrival = arrival(480, 80);
+
+  assert.ok(leftArrival < rightArrival);
+  assert.equal(mexicanWave(120, 80, leftArrival, width, height), 1);
+  assert.equal(mexicanWave(480, 80, rightArrival, width, height), 1);
+  assert.equal(mexicanWave(480, 80, leftArrival, width, height), 0);
+  assert.equal(mexicanWave(120, 80, rightArrival, width, height), 0);
+});
+
+test("Mexican wave is bounded, smooth and has no visible loop seam", () => {
+  const samples = Array.from({ length: 100 }, (_, i) => mexicanWave(i * 6, 140, i * 0.08, 600, 400));
   assert.ok(samples.every((value) => value >= 0 && value <= 1));
-  assert.notEqual(ambientWave(130, 180, 0), ambientWave(130, 180, 5));
-  assert.ok(Math.abs(ambientWave(130, 180, 1) - ambientWave(130, 180, 1.001)) < 0.01);
+  assert.equal(mexicanWave(120, 80, 0, 600, 400), 0);
+  assert.equal(mexicanWave(120, 80, 8, 600, 400), 0);
+  assert.ok(Math.abs(mexicanWave(120, 80, 2.4, 600, 400) - mexicanWave(120, 80, 2.401, 600, 400)) < 0.01);
+  assert.equal(mexicanWave(120, 80, 2, 0, 400), 0);
 });
 
 test("illumination is smooth and reaches zero at the boundary", () => {

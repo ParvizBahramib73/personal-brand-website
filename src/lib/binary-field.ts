@@ -45,11 +45,30 @@ export function makeBinaryGrid(width: number, height: number, spacing: number): 
   return digits;
 }
 
-/** Soft diagonal wave, returning a smoothly moving crest in [0, 1]. */
-export function ambientWave(x: number, y: number, seconds: number): number {
-  const phase = x * 0.012 + y * 0.009 - seconds * 0.42;
-  const value = (1 + Math.sin(phase)) / 2;
-  return value * value * value * value;
+/**
+ * A stadium-style wave: a narrow crest travels left-to-right.
+ * Every digit rises and settles in sequence; unlike opacity-only modulation,
+ * the vertical displacement makes the wave perceptible without interaction.
+ *
+ * Start/end positions are fully outside the viewport, so looping is seamless.
+ */
+export function mexicanWave(
+  x: number,
+  y: number,
+  seconds: number,
+  width: number,
+  height: number,
+): number {
+  if (width <= 0 || height <= 0) return 0;
+
+  const period = 8;
+  const halfWidth = 165;
+  const diagonalPosition = x + y * 0.12;
+  const distanceToCover = width + height * 0.12 + halfWidth * 2;
+  const phase = ((seconds % period) + period) % period;
+  const crestX = -halfWidth + (phase / period) * distanceToCover;
+
+  return radialFalloff(Math.abs(diagonalPosition - crestX), halfWidth);
 }
 
 /** Smooth edge with zero added illumination at and beyond the radius. */
